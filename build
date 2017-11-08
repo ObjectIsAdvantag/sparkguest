@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "This script builds the 'spark-jwt-token' command"
+
+rm -rf bin
+mkdir bin
+echo "#!/usr/bin/env node" >> bin/spark-jwt-token
+cat lib/command.js >> bin/spark-jwt-token
+
+echo "All done: spark-jwt-token script created!"
+echo "checking bin directory:"
+ls bin/

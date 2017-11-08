@@ -2,5 +2,6 @@
 .vscode
 
 # Build artefacts 
+build
 node_modules/
 *.log

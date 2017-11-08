@@ -2,19 +2,17 @@
   "name": "spark-jwt-token",
   "version": "0.1.0",
   "description": "Utilities to generate JWT tokens for Cisco Spark API's guest mode",
-  "main": "spark-jwt-token.js",
+  "bin": {
+    "spark-jwt-token": "bin/spark-jwt-token"
+  },
   "dependencies": {
     "command-line-args": "^4.0.7",
     "jsonwebtoken": "^8.1.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "jwt",
     "ciscospark"
   ],
-  "author": "Stève Sfartz",
+  "author": "Stève Sfartz <stsfartz@cisco.com>",
   "license": "MIT"
 }

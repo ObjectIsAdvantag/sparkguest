@@ -1,5 +1,9 @@
+/*
+ * Copyright (c) 2017 Cisco
+ * Released under the MIT license. See the file LICENSE
+ * for the complete license
+ */
 
-// sign with default (HMAC SHA256)
 var jwt = require('jsonwebtoken');
 
 var secret = process.env.SECRET;

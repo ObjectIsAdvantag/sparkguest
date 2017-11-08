@@ -1,4 +1,4 @@
-
+#!/usr/bin/env node
 /*
  * Copyright (c) 2017 Cisco
  * Released under the MIT license. See the file LICENSE
@@ -70,7 +70,19 @@ if (args.organisation) {
     org = args.organisation;
 }
 if (!org) {
-    console.log("no organisation specified, exiting...");
+    console.log("no organisation specified, add a ORG environment variable or use: -o <org>");
+    process.exit(0);
+}
+
+var uid = args.uid;
+if (!uid) {
+    console.log("no user id specified, use: -u <userid>");
+    process.exit(0);
+}
+
+var name = args.name;
+if (!name) {
+    console.log("no user name specified, use: -n <username>");
     process.exit(0);
 }
 
@@ -79,19 +91,7 @@ if (args.secret) {
     org = args.secret;
 }
 if (!secret) {
-    console.log("no secret specified, exiting...");
-    process.exit(0);
-}
-
-var uid = args.uid;
-if (!uid) {
-    console.log("no user id specified, exiting...");
-    process.exit(0);
-}
-
-var name = args.name;
-if (!name) {
-    console.log("no user name specified, exiting...");
+    console.log("no secret specified, add a ORG environment variable or use: -o <org>");
     process.exit(0);
 }
 
