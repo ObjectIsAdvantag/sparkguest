@@ -7,37 +7,46 @@ This repo also contains two scripts to experience how JWT tokens are generated a
 
 ## spark-jwt-token
 
-From a terminal, type:
+To install, type:
 
-```shell
-npm install spark-jwt-token -g
-```
+    ```shell
+    npm install spark-jwt-token -g
+    ```
+
+To generate a JWT token, type:
+
+    ```shell
+    SECRET=<secret> ORG=<org> spark-jwt-token -u <userid> -n <username>
+    ```
+
+To generate a Cisco Spark API access token, type:
+
 
 
 ## Scripts
 
 To install the scripts, type 
 
-```shell
-git clone https://github.com/ObjectIsAdvantag/spark-jwt-token
-cd spark-jwt-token
-npm install
-```
+    ```shell
+    git clone https://github.com/ObjectIsAdvantag/spark-jwt-token
+    cd spark-jwt-token
+    npm install
+    ```
 
 
-## generate.js
+### generate.js
 
 To create a new JWT token, type:
 
-```shell
-SECRET=<your secret> node generate.js <organisation> <userid> <username>
-```
+    ```shell
+    SECRET=<secret> node generate.js <organisation> <userid> <username>
+    ```
 
 
-## verifiy
+### verify.js
 
 To check the contents of an existing token, type:
 
-```shell
-SECRET=<your secret> node verify.js <token>
-```
+    ```shell
+    SECRET=<secret> node verify.js <token>
+    ```
