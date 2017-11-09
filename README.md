@@ -19,8 +19,13 @@ To generate a JWT token, type:
     SECRET=<secret> ORG=<org> spark-jwt-token -u <userid> -n <username>
     ```
 
-To generate a Cisco Spark API access token, type:
+To generate a Cisco Spark API access token, pass the JWT token to the command below:
 
+    ```shell
+    curl -X POST https://api.ciscospark.com/v1/jwt/login -H 'authorization: <jwttoken>'
+    ```
+
+To check your newly issued access token is correct, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource.
 
 
 ## Scripts
