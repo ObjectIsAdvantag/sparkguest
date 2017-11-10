@@ -1,12 +1,12 @@
 #!/bin/sh
 
-echo "This script builds the 'spark-jwt-token' command"
+echo "This script builds the 'sparkjwt' command"
 
 rm -rf bin
 mkdir bin
-echo "#!/usr/bin/env node" >> bin/spark-jwt-token
-cat lib/command.js >> bin/spark-jwt-token
+echo "#!/usr/bin/env node" >> bin/sparkjwt
+cat lib/command.js >> bin/sparkjwt
 
-echo "All done: spark-jwt-token script created!"
+echo "All done: 'sparkjwt' script created!"
 echo "checking bin directory:"
 ls bin/
