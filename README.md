@@ -1,31 +1,38 @@
-# JWT token utilities for Cisco Spark guest mode
+# JWT token utilities for Cisco Spark APIs
 
-The spark-jwt-token is a CLI that generate JWT tokens based on the guest mode 'organisation' and 'secret' you can retreive from [Cisco Spark for Developers portal](https://developer.ciscospark.com).
+The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on an a 'organisation' and 'secret' you can retreive from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
 
-This repo also contains two scripts to experience how JWT tokens are generated and can be verified.
+This repo also contains two NodeJS scripts that how how JWT tokens can be generated and can be verified.
 
 
-## spark-jwt-token
+## CLI
 
-To install, type:
-
-    ```shell
-    npm install spark-jwt-token -g
-    ```
-
-To generate a JWT token, type:
+To install the `sparkjwt` CLI, type:
 
     ```shell
-    SECRET=<secret> ORG=<org> spark-jwt-token -u <userid> -n <username>
+    npm install sparkjwt -g
     ```
 
-To generate a Cisco Spark API access token, pass the JWT token to the command below:
+
+To create a JWT token for a user, type:
+
+    ```shell
+    SECRET=<secret> ORG=<org> sparkjwt -u <userId> -n <userName>
+    ```
+
+    Note that the `userId` is an organisation unique identifier for the user, in order to persist Spark data associated to the user
+
+    The `userName` is used to identify the user in Cisco Spark spaces.
+
+
+Then pass the JWT token to the POST request below in order to generate a Cisco Spark API access token for the user: 
 
     ```shell
     curl -X POST https://api.ciscospark.com/v1/jwt/login -H 'authorization: <jwttoken>'
     ```
 
-To check your newly issued access token is correct, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource.
+    Note that the issued token will expire after 6 hours.
+    You can test the temporarly issued access token is correct simply by reaching to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource of the REST API.
 
 
 ## Scripts
@@ -44,7 +51,7 @@ To install the scripts, type
 To create a new JWT token, type:
 
     ```shell
-    SECRET=<secret> node generate.js <organisation> <userid> <username>
+    SECRET=<secret> node generate.js <organisation> <userId> <userName>
     ```
 
 
