@@ -1,6 +1,6 @@
-# JWT token utilities for Cisco Spark APIs
+# CLI to generate 'Guest' access tokens for Cisco Spark API
 
-The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on an a 'organisation' and 'secret' you can retreive from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
+The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on a developer organisation 'id' and 'secret' you can retreive from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
 
 
 To install the `sparkjwt` CLI, type:
