@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 const debug = require('debug')('sparkjwt:generate')
 
@@ -12,7 +11,7 @@ note that:\n\
     .option('-o, --organization [org]', 'developer organization')
     .option('-s, --secret [secret]', 'secret for the developer organization')
     .arguments('<userid> <username>')
-    .action(function (id, name) {
+    .action(function (userid, username) {
 
         // Check org & secret
         let org = program.organization || process.env.ORG
@@ -30,17 +29,17 @@ note that:\n\
         debug('successfully collected organization details')
 
         // Check user info
-        if (typeof id === 'undefined') {
+        if (typeof userid === 'undefined') {
             console.error('no userid specified, exiting...');
             process.exit(1);
         }
-        if (typeof name === 'undefined') {
+        if (typeof username === 'undefined') {
             console.error('no full name specified of "Guest" user, exiting...');
             process.exit(1);
         }
         debug('successfully collected guest user info')
 
-        requestGuestToken(org, secret, id, name)
+        requestGuestToken(org, secret, userid, username)
     })
     .on('--help', function () {
         console.log('')
