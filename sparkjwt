@@ -11,7 +11,7 @@ program
     .command('guest [-os] <userid> <username>', 'returns a temporary access token for the specified "Guest" user and developer "Organization"', { isDefault: true })
     .command('issuer [-os] <userid> <username>', 'creates a reusable JWT "issuer" token for the specified user and organization')
     .command('request <issuer>', 'returns a temporary "Guest" access token from a JWT "issuer" token')
-    //.command('check <token>', 'displays info about the specified token')
+    .command('check <token>', 'shows the info contains in the JWT token')
     .on('--help', function () {
         console.log('')
         console.log('  Examples:')

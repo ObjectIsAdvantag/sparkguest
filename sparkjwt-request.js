@@ -1,5 +1,5 @@
 
-const debug = require('debug')('sparkjwt:guest')
+const debug = require('debug')('sparkjwt:request')
 
 const program = require('commander')
 
@@ -30,8 +30,37 @@ program
 program.parse(process.argv)
 
 
-function requestGuestToken(token) {
+function requestGuestToken(issuerToken) {
     debug("requesting new 'guest' token")
-
-    console.log("not implemented")    
+    
+    debug('contacting Cisco Spark API endpoint: /jwt/login')
+    
+    const axios = require('axios');
+    axios.post('https://api.ciscospark.com/v1/jwt/login', '',
+    { headers: { 'Authorization': issuerToken } })
+    .then(response => {
+        if (!response.data || !response.data.token) {
+            debug("no token found in response: " + response)
+            console.log("failed to generate a JWT issuer token: bad response")
+            console.log("exiting...")
+            process.exit(1)
+        }
+    
+        let issuedToken = response.data.token
+        console.log(issuedToken)
+    })
+    .catch(err => {
+        switch (err.code) {
+            case 'ENOTFOUND':
+                debug("could not contact Cisco Spark API")
+                break
+            default:
+                debug("error accessing /jwt/login, err: " + err.message)
+                break
+        }
+        
+        console.log("failed to generate an access token")
+        console.log("exiting...")
+        process.exit(1);
+    })   
 }

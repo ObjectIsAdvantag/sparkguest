@@ -38,7 +38,9 @@ program
         }
         debug('successfully collected guest user info')
 
-        createJWTIssuer(org, secret, id, name)
+        const token = createJWTIssuer(org, secret, id, name)
+
+        console.log(token)
     })
     .on('--help', function () {
         console.log('')
@@ -69,7 +71,7 @@ function createJWTIssuer(org, secret, userid, username) {
 
         const issuerToken = jwt.sign(payload, decoded, { algorithm: 'HS256', noTimestamp: true })
 
-        debug("successfully built issuer JWT token: " + issuerToken)
+        debug("successfully built issuer JWT token" + issuerToken.substring(0,50))
 
         return issuerToken
     }
