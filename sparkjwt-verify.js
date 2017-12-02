@@ -1,12 +1,12 @@
 
-const debug = require('debug')('sparkjwt:check')
+const debug = require('debug')('sparkjwt:verify')
 
 const program = require('commander')
 
 program
-    .description('displays informations contained in a JWT token')
-    .option("-j, --jwt", "shows decrypted JWT info")
-    .option("-s, --spark", "shows Cisco Spark API info")
+    .description('reveals info contained in a JWT token')
+    .option("-j, --jwt", "decrypts the JWT token (works with JWT issuer and issued tokens)")
+    .option("-s, --spark", "shows the Cisco Spark user identity (only work with JWT issued tokens)")
     .arguments('<token>')
     .action(function (token) {
 
@@ -33,8 +33,8 @@ program
         console.log('')
         console.log('  Examples:')
         console.log('')
-        console.log('    $ sparkjwt check --jwt 123456789.RRETEZT3T63362.987654321')
-        console.log('    $ sparkjwt check --spark 123456789.RRETEZT3T63362.987654321')
+        console.log('    $ sparkjwt verify --jwt 123456789.RRETEZT3T63362.987654321')
+        console.log('    $ sparkjwt verify --spark 123456789.RRETEZT3T63362.987654321')
     })
 
 program.parse(process.argv)
@@ -84,6 +84,17 @@ function showSparkInfo(token) {
         console.log(response.data)
     })
     .catch(err => {
+        if (err.response) {
+            if (err.response.status == 401) {
+                debug("401, bad token")
+                console.error("bad token, could not authenticate")
+                process.exit(1);
+            }
+
+            console.error("could not retrieve info, err: " + err.message)
+            process.exit(1);
+        }
+
         switch (err.code) {
             case 'ENOTFOUND':
                 debug("could not reach host: ENOTFOUND")
@@ -92,7 +103,6 @@ function showSparkInfo(token) {
                 debug("error accessing /people/me, err: " + err.message)
                 break
         }
-        
         console.error("could not contact Cisco Spark API")
         process.exit(1);
     })   

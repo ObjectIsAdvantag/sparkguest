@@ -1,6 +1,6 @@
 # CLI to generate 'Guest' access tokens for Cisco Spark API
 
-The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on a developer organisation 'id' and 'secret' you can retreive from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
+The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on a developer organisation 'id' and 'secret' you can retrieve from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
 
 
 To install the `sparkjwt` CLI, type:
@@ -9,22 +9,23 @@ To install the `sparkjwt` CLI, type:
     npm install sparkjwt -g
     ```
 
-
+## 
 To create an access token for a 'Guest' user, type:
 
     ```shell
-    SECRET=<secret> ORG=<org> sparkjwt -u <userId> -n <userName>
+    sparkjwt <userId> <userName> -o <organisation> -s <secret>
     ```
 
     Where:
         - the `userId` is an identifier unique to the developer org. This identifier is used to persist Spark data among the user interactions inside Cisco Spark
         - the `userName` is used to identify the user in Cisco Spark spaces
-        - the issued token will expire after 6 hours, and is formed as a JWT token (see below for more info)
+        - the issued token will expire after 6 hours, and is formatted as a JWT token (see below for more info, and the `check` command)
+        - note that you can specify the organisation identifier or secret via environment variables
 
     Example (with verbose debugging info):
 
     ```shell
-    DEBUG=sparkjwt SECRET=<dev-secret> ORG=<dev-org> bin/sparkjwt -u "123" -n "Stève"
+    sparkjwt guest "123456" "Stève" -o <dev-org> -s <dev-secret>
         sparkjwt arguments successfully checked +0ms
         sparkjwt successfully built issuer JWT token: BDmh0rgbcVMfpklnyWfurxX5Y... +59ms
         sparkjwt contacting Cisco Spark API endpoint: https://api.ciscospark.com/v1/jwt/login +2ms
@@ -34,7 +35,7 @@ To create an access token for a 'Guest' user, type:
 
 ## Implementation notes
 
-First, a JWT issuer token is forged from the user data (user id, user name) and the developer organization info (org id, org secret).
+First, a **JWT issuer** token is forged from the user data (user id, user name) and the developer organization info (org id, org secret).
 
 Then the JWT issu**er** token is passed as a Header of a POST request to the /jwt/login endpoint in order to generate a Cisco Spark API access token for the guest user (JWT issu**ed** token): 
 
@@ -54,6 +55,10 @@ This token is build from a user's data (user id and user name) and the details o
 ```
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJuYW1lIjoiU3TDqHZlIiwiaXNzIjoiWTJselkyOXpjR0Z5YXpvdkwzVnpMMDlTUjBGT1NWcEJWRWxQVGk4eVlUbGxNVE5sT0MweFlXTTNMVFF4T0dFdE9UY3hNeTB6WVdRell6azVNV0l4WWpVIn0.VZkUYLuA1ROFkbOEgEBDnh0rpklnyWfY
 ```
+
+Note that the issued token also has a JWT format.
+If you decode it, you'll discover its contents.
+Go to https://jwt.io, or simply type: `sparkjwt verify --jwt <token>`
 
 **Decoded Header Section**
 
@@ -80,7 +85,8 @@ This token is generated from a JWT issuer token.
 
 This token gives access to the Cisco Spark API under the 'Guest' user identity (associated to the JWT issuer token)
 
-To test the issued access tokens for a user, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource of the Cisco Spark REST API, paste the issued token and examine the response to identify the user display name. 
+To test the issued access tokens for a user, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource of the Cisco Spark REST API, paste the issued token and examine the response to identify the user display name.
+Alternatively, you can simply type: `sparkjwt verify --spark <token>`
 
     Example of Person details for an issued access token:
 
@@ -101,7 +107,9 @@ To test the issued access tokens for a user, reach to the [GET /people/me](https
     ```
 
 Note that the issued token also has a JWT format.
-If you decode it, you'll discover its structure:
+If you decode it, you'll discover its structure.
+Go to https://jwt.io, or simply type: `sparkjwt verify --jwt <token>`
+
 
 **Decoded Header Section**
 
