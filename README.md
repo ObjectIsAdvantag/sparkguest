@@ -9,7 +9,9 @@ To install the `sparkjwt` CLI, type:
     npm install sparkjwt -g
     ```
 
-## 
+
+## QuickStart
+
 To create an access token for a 'Guest' user, type:
 
     ```shell
@@ -25,7 +27,7 @@ To create an access token for a 'Guest' user, type:
     Example (with verbose debugging info):
 
     ```shell
-    sparkjwt guest "123456" "Stève" -o <dev-org> -s <dev-secret>
+    DEBUG=sparkjwt*  sparkjwt guest "123" "Stève" -o <dev-org> -s <dev-secret>
         sparkjwt arguments successfully checked +0ms
         sparkjwt successfully built issuer JWT token: BDmh0rgbcVMfpklnyWfurxX5Y... +59ms
         sparkjwt contacting Cisco Spark API endpoint: https://api.ciscospark.com/v1/jwt/login +2ms

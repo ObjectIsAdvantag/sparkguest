@@ -38,9 +38,12 @@ program
         }
         debug('successfully collected guest user info')
 
-        const token = createJWTIssuer(org, secret, id, name)
+        // Forge issuer token
+        const JWTUtil = require('./sparkjwt-util')
+        const issuerToken = JWTUtil.createJWTIssuer(org, secret, id, name)
 
-        console.log(token)
+        // Show token
+        console.log(issuerToken)
     })
     .on('--help', function () {
         console.log('')
@@ -51,33 +54,3 @@ program
     })
 
 program.parse(process.argv)
-
-// Builds a JWT issuer token from a Guest user id and name
-function createJWTIssuer(org, secret, userid, username) {
-    debug(`generating JWT issuer token for guest user with id: ${userid}, name: ${username}, in dev org: ${org}`)
-
-    try {
-
-        // sign with HMAC SHA256
-        const jwt = require('jsonwebtoken')
-
-        const payload = {
-            "sub": userid,
-            "name": username,
-            "iss": org
-        }
-
-        const decoded = Buffer.from(secret, 'base64')
-
-        const issuerToken = jwt.sign(payload, decoded, { algorithm: 'HS256', noTimestamp: true })
-
-        debug("successfully built issuer JWT token" + issuerToken.substring(0,50))
-
-        return issuerToken
-    }
-    catch (err) {
-        console.error("failed to generate a JWT issuer token, exiting...");
-        debug("err: " + err)
-        process.exit(1)
-    }
-}
