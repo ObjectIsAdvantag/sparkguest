@@ -1,9 +1,9 @@
 {
   "name": "sparkjwt",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "CLI to generate 'Guest' access tokens for Cisco Spark APIs",
   "bin": {
-    "sparkjwt": "bin/sparkjwt"
+    "sparkjwt": "sparkjwt"
   },
   "dependencies": {
     "axios": "^0.17.1",

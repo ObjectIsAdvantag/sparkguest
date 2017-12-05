@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2017 Cisco Systems
+// Licensed under the MIT License 
+//
 
 const debug = require('debug')('sparkjwt:util')
 
@@ -44,7 +48,7 @@ module.exports.requestGuestToken = function (issuerToken) {
     
     const axios = require('axios');
     axios.post('https://api.ciscospark.com/v1/jwt/login', '',
-    { headers: { 'Authorization': issuerToken } })
+    { headers: { 'Authorization': 'Bearer ' + issuerToken } })
     .then(response => {
         if (!response.data || !response.data.token) {
             debug("no token found in response: " + response)
