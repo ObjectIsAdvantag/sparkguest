@@ -30,6 +30,10 @@ program
         console.log('      12tre33.54343275.5456456745')
         console.log('    $ sparkjwt request "12tre33.54343275.5456456745"')
         console.log('      4234324.45435435.543543543')
-    });    
+    });
 
 program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+}
