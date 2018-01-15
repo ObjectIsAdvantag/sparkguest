@@ -1,7 +1,14 @@
-# CLI to generate 'Guest' access tokens for Cisco Spark API
+# CLI to generate JWT tokens for Cisco Spark 'Guest Issuer' Applications
 
-The `sparkjwt` command line interface (CLI) helps generate JWT user tokens based on a developer organisation 'id' and 'secret' you can retrieve from [Cisco Spark for Developers portal](https://developer.ciscospark.com) (COMING).
+'Guest Issuer' Applications allow guests (non Cisco Spark users) to persistently use the Cisco Spark platform through the Spark Sdks and Widgets. Check the [online documentation for details](https://developer.ciscospark.com/guest-issuer.html).
 
+The `sparkjwt` command line interface (CLI) helps generate JWT tokens for 'Guest Issuer' Applications.
+
+To use the tool, you'll first need to create a 'Guest Issuer' application from [Spark for Developers portal](https://developer.ciscospark.com/add-guest.html), and fetch your 'Guest Issuer' Application's organisation id and secret.
+**Note that you need a paying account to access the 'Guest Issuer' application.**
+
+
+## QuickStart
 
 To install the `sparkjwt` CLI, type:
 
@@ -9,20 +16,17 @@ To install the `sparkjwt` CLI, type:
     npm install sparkjwt -g
     ```
 
-
-## QuickStart
-
-To create an access token for a 'Guest' user, type:
+To create an access token for a 'Guest' user (non Cisco Spark users), type:
 
     ```shell
-    sparkjwt <userId> <userName> -o <organisation> -s <secret>
+    sparkjwt [guest] <userId> <userName> -o <organisation> -s <secret>
     ```
 
     Where:
-        - the `userId` is an identifier unique to the developer org. This identifier is used to persist Spark data among the user interactions inside Cisco Spark
-        - the `userName` is used to identify the user in Cisco Spark spaces
-        - the issued token will expire after 6 hours, and is formatted as a JWT token (see below for more info, and the `check` command)
-        - note that you can specify the organisation identifier or secret via environment variables
+        - the `userId` is a user identifier unique to your 'Guest Issuer' application. This identifier is used by Cisco Spark to persist user among sessions. Understand: if another token gets generated with the same 'userId', the guest user interacting with that token will see Spaces, Messages, and inherit Memberships from previous spark interactions for this 'userId',
+        - the `userName` is used to identify the user in Cisco Spark spaces,
+        - the issued access token expires after 6 hours and is formatted as a JWT token (see below for more info, and the `check` command)
+        
 
     Example (with verbose debugging info):
 
@@ -34,10 +38,14 @@ To create an access token for a 'Guest' user, type:
     eyJhbGciOiJSUzI1NiJ9.eyJtYWN...uNDU1WiJ9.berce_d8vrRw6vDI....nMAlnYNj-f921mcqU
     ```
 
+    Note that:
+        - instead of passing them through command line parameters, you can alternatively specify the organisation identifier or secret via `ORG` and `SECRET` environment variables
+        - the `guest` command is the default's for sparkjwt. You can omit it as in `sparkjwt  "123" "Stève" -o <dev-org> -s <dev-secret>`
+
 
 ## Implementation notes
 
-First, a **JWT issuer** token is forged from the user data (user id, user name) and the developer organization info (org id, org secret).
+First, a **JWT Guest issuer** token is forged from the user data (user id, user name) and the developer organization info (org id, org secret).
 
 Then the JWT issu**er** token is passed as a Header of a POST request to the /jwt/login endpoint in order to generate a Cisco Spark API access token for the guest user (JWT issu**ed** token): 
 

@@ -26,7 +26,7 @@ module.exports.createJWTIssuer = function (org, secret, userid, username) {
 
         const issuerToken = jwt.sign(payload, decoded, { algorithm: 'HS256', noTimestamp: true })
 
-        debug("successfully built issuer JWT token" + issuerToken.substring(0,50))
+        debug("successfully built issuer JWT token: " + issuerToken.substring(0,30))
 
         return issuerToken
     }
