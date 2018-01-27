@@ -69,13 +69,10 @@ module.exports.fetchToken = function (guestToken) {
             default:
                 debug("error accessing /jwt/login, err: " + err.message);
 
-                if (err.message == "Request failed with status code 400") {
-                    // Good chances the token is not valud / has expired
-                    if (err.response.data.message == "JWT token invalid") {
-                        console.log("Invalid Guest token: has it expired?");
-                        process.exit(1);
-                    }
-                }
+                if (err.response && (err.response.status >= 400) && (err.response.status < 500)) {
+                    console.log(`Invalid Guest token: ${err.response.data.message}`);
+                    process.exit(1);
+                }    
                 break;
         }
         

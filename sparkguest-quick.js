@@ -56,8 +56,8 @@ note that:\n\
         console.log('')
         console.log('  Examples:')
         console.log('')
-        console.log('    $ sparkjwt guest 123456789 "John Doe" -o "org_id" -s "secret"')
-        console.log('    $ ORG="org_id" SECRET="secret" sparkjwt gest 123456789 "John Doe"')
+        console.log('    $ sparkjwt quick 123456789 "John Doe" -o "org_id" -s "secret"')
+        console.log('    $ ORG="org_id" SECRET="secret" sparkjwt quick 123456789 "John Doe"')
     })
 
 program.parse(process.argv)
