@@ -1,8 +1,8 @@
-# CLI to generate JWT tokens for Cisco Spark 'Guest Issuer' Applications
+# CLI to generate Guest tokens for Cisco Spark 'Guest Issuer' Applications
 
-'Guest Issuer' Applications allow guests (non Cisco Spark users) to persistently use the Cisco Spark platform through the Spark Sdks and Widgets. Check the [online documentation for details](https://developer.ciscospark.com/guest-issuer.html).
+'Guest Issuer' Applications allow guests (non Cisco Spark users) to persistently use the Cisco Spark platform through the Spark SDKs and Widgets. Check the [online documentation for details](https://developer.ciscospark.com/guest-issuer.html).
 
-The `sparkjwt` command line interface (CLI) helps generate JWT tokens for 'Guest Issuer' Applications.
+The `sparkguest` command line interface (CLI) helps generate Guest tokens for 'Guest Issuer' applications.
 
 To use the tool, you'll first need to create a 'Guest Issuer' application from [Spark for Developers portal](https://developer.ciscospark.com/add-guest.html), and fetch your 'Guest Issuer' Application's organisation id and secret.
 **Note that you need a paying account to access the 'Guest Issuer' application.**
@@ -10,65 +10,108 @@ To use the tool, you'll first need to create a 'Guest Issuer' application from [
 
 ## QuickStart
 
-To install the `sparkjwt` CLI, type:
+To generate a Guest token, type the commands below in a terminal
+
+```shell
+# Install the CLI
+npm install sparkguest -g
+
+# Create a Guest token with the specified user info
+sparkguest create <userId> <userName> -i <issuerAppId> -s <issuerAppSecret> [-d <expirationDate>]
+
+# Fetch an access token for the Guest user (valid for 6 hours)
+sparkguest login <guestToken>
+```
+
+
+You can even get there quicker with the `quick` command:
+
+```shell
+# Install the CLI
+npm install sparkguest -g
+
+# Create a Guest token, and fetch an access token right away
+# Here, the guest token is volatile (neither stored, not returned)
+sparkguest quick <userId> <userName> -i <issuerAppId> -s <issuerAppSecret>
+```
+
+
+
+## Detailled instructions
+
+To install the `sparkguest` CLI, type:
 
     ```shell
-    npm install sparkjwt -g
+    npm install sparkguest -g
     ```
 
-To create an access token for a 'Guest' user (non Cisco Spark users), type:
+
+To create a 'Guest token' for a 'Guest' user (non Cisco Spark users), type:
 
     ```shell
-    sparkjwt [guest] <userId> <userName> -o <organisation> -s <secret>
+    sparkguest [create] <userId> <userName> -i <issuerAppId> -s <issuerAppSecret> [-e <expirationDate>]
     ```
 
     Where:
-        - the `userId` is a user identifier unique to your 'Guest Issuer' application. This identifier is used by Cisco Spark to persist user among sessions. Understand: if another token gets generated with the same 'userId', the guest user interacting with that token will see Spaces, Messages, and inherit Memberships from previous spark interactions for this 'userId',
-        - the `userName` is used to identify the user in Cisco Spark spaces,
-        - the issued access token expires after 6 hours and is formatted as a JWT token (see below for more info, and the `check` command)
-        
-
+        - `userId` is a user identifier unique to your 'Guest Issuer'. This identifier is used by Cisco Spark to persist user data among sessions. Understand: if another token gets generated with the same 'userId', the Guest user interacting with that token will see Spaces, Messages, and inherit Memberships from previous Spark interactions for this 'userId',
+        - `userName` is used to identify the user in Cisco Spark spaces,
+        - `expirationDate` is a date formatted as a number of seconds. Defaults to 90 minutes after the command is invoked,
+        - the `issuerAppId` and `issuerAppSecret` tie to the 'Guest Issuer Application' created frpm the [Spark for Developers portal](https://developer.ciscospark.com/add-guest.html).
+    
     Example (with verbose debugging info):
 
     ```shell
-    DEBUG=sparkjwt*  sparkjwt guest "123" "Stève" -o <dev-org> -s <dev-secret>
-        sparkjwt arguments successfully checked +0ms
-        sparkjwt successfully built issuer JWT token: BDmh0rgbcVMfpklnyWfurxX5Y... +59ms
-        sparkjwt contacting Cisco Spark API endpoint: https://api.ciscospark.com/v1/jwt/login +2ms
+    DEBUG=guest*  sparkguest create "123" "Stève" -i Y2lz...VzLMDY -s AMx/FPI...NABzD6o=
+        guest arguments successfully checked +0ms
+        guest successfully built Guest token: BDmh0rgbcVMfpklnyWfurxX5Y... +59ms
+        guest Guest token is valid till XXXXX +1ms        
     eyJhbGciOiJSUzI1NiJ9.eyJtYWN...uNDU1WiJ9.berce_d8vrRw6vDI....nMAlnYNj-f921mcqU
     ```
 
     Note that:
-        - instead of passing them through command line parameters, you can alternatively specify the organisation identifier or secret via `ORG` and `SECRET` environment variables
-        - the `guest` command is the default's for sparkjwt. You can omit it as in `sparkjwt  "123" "Stève" -o <dev-org> -s <dev-secret>`
+        - instead of passing them through command line parameters, you can alternatively specify the 'Guest Issuer Application'  identifier and secret via environment variables `ISSUER` and `SECRET` 
+        - the `create` command is the default's for sparkguest. You can omit it as in `sparkguest "123" "Stève" -i Y2lz...VzLMDY -s AMx/FPI...NABzD6o=`
+        
 
-
-## Implementation notes
-
-First, a **JWT Guest issuer** token is forged from the user data (user id, user name) and the developer organization info (org id, org secret).
-
-Then the JWT issu**er** token is passed as a Header of a POST request to the /jwt/login endpoint in order to generate a Cisco Spark API access token for the guest user (JWT issu**ed** token): 
+Once you've got a 'Guest token', you'll need to fetch an access token (valid for 6 hours).
 
     ```shell
-    curl -X POST https://api.ciscospark.com/v1/jwt/login -H 'authorization: <jwt-issuer-token>'
+    sparkguest login <guestToken>
+    ```
+
+    Note that:
+       - the command uses the Cisco Spark API 's /jwt/login endpoint behind the scene.
+       - the fetched accessed token is valid for 6 hours
+
+
+To quickly check the data contained in a JWT token (guest or access token), you can type:
+
+    ```shell
+    sparkguest verify --jwt <token>
     ```
 
 
-### JWT issuer token
+To quickly the Person behind an access token (equivalent of a GET /people/me), type
 
-This token is used to generate access tokens for a Guest user.
+    ```shell
+    sparkguest verify --spark <access_token>
+    ```
 
-This token is build from a user's data (user id and user name) and the details of the developer org (org id and secret).
+
+### Guest tokens
+
+Guest tokens have a JWT format, and are signed with your 'Guest Issuer Application' secret so that Cisco Spark can be assured of its origin.
+It contains an expiration date so that Cisco Spark will refuse to generate access tokens - via the /jwt/login endpoint - after the expiration date.
 
 **Example of JWT issuer token created via the sparkjwt CLI**
 
 ```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJuYW1lIjoiU3TDqHZlIiwiaXNzIjoiWTJselkyOXpjR0Z5YXpvdkwzVnpMMDlTUjBGT1NWcEJWRWxQVGk4eVlUbGxNVE5sT0MweFlXTTNMVFF4T0dFdE9UY3hNeTB6WVdRell6azVNV0l4WWpVIn0.VZkUYLuA1ROFkbOEgEBDnh0rpklnyWfY
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 ```
 
 Note that the issued token also has a JWT format.
 If you decode it, you'll discover its contents.
-Go to https://jwt.io, or simply type: `sparkjwt verify --jwt <token>`
+Go to https://jwt.io to decode it, or simply type: `sparkguest decode <guest token>`
 
 **Decoded Header Section**
 
@@ -85,18 +128,19 @@ Go to https://jwt.io, or simply type: `sparkjwt verify --jwt <token>`
 {
   "sub": "123",
   "name": "Stève",
-  "iss": "Y2lzY29zcGFyazovL3VzL09SR0FOSVpBVElPTi8yYTllMTNlOC0xYWM3LTQxOGEtOTcxMy0zYWQzYzk5MWIxYjU"
+  "iss": "Y2lzY29zcGFyazovL3VzL09SR0FOSVpBVElPTi8yYTllMTNlOC0xYWM3LTQxOGEtOTcxMy0zYWQzYzk5MWIxYjU",
+  "exp": "XXXXX"
 }
 ```
 
-### JWT issued token
 
-This token is generated from a JWT issuer token.
+### Access tokens (issued from Guest tokens )
 
-This token gives access to the Cisco Spark API under the 'Guest' user identity (associated to the JWT issuer token)
+These tokens are generated from a Guest token by invoking the /jwt/login endpoint
+They give access to the Cisco Spark API, SDKs and Widgets under the identity of the Guest user.
 
 To test the issued access tokens for a user, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource of the Cisco Spark REST API, paste the issued token and examine the response to identify the user display name.
-Alternatively, you can simply type: `sparkjwt verify --spark <token>`
+Alternatively, you can simply type: `sparkguest whois <access token>`
 
     Example of Person details for an issued access token:
 

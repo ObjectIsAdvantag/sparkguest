@@ -1,9 +1,9 @@
 {
-  "name": "sparkjwt",
-  "version": "0.3.2",
-  "description": "CLI to generate 'Guest' access tokens for Cisco Spark APIs",
+  "name": "sparkguest",
+  "version": "0.4.0",
+  "description": "CLI to create 'Guest' tokens, and fetch access tokens for Cisco Spark Guest Issuer applications.",
   "bin": {
-    "sparkjwt": "sparkjwt"
+    "sparkguest": "sparkguest"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -13,6 +13,7 @@
   },
   "keywords": [
     "jwt",
+    "guest",
     "ciscospark"
   ],
   "author": "Stève Sfartz <stsfartz@cisco.com>",

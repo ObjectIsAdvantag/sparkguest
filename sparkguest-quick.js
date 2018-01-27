@@ -3,34 +3,34 @@
 // Licensed under the MIT License 
 //
 
-const debug = require('debug')('sparkjwt:guest')
+const debug = require('debug')('guest:quick')
 
 const program = require('commander')
 
 program
-    .description('generates an API access token for the specified "Guest" user and developer "Organization"\n\
+    .description('generates an access token for the specified user of the "Guest Issuer" organization"\n\
 note that:\n\
-  - the organisation can be passed either via an ORG env variable, or the -o option\n\
+  - the "Guest Issuer" identifier can be passed either via an ISSUER env variable, or the -i option\n\
   - the secret can be passed either via a SECRET env variable, or the -s option')
-    .option('-o, --organization [org]', 'developer organization')
-    .option('-s, --secret [secret]', 'secret for the developer organization')
+  .option('-i, --issuer [issuer id]', 'Guest Issuer identifier')
+  .option('-s, --secret [secret]', 'secret for the developer organization')
     .arguments('<userid> <username>')
     .action(function (userid, username) {
 
-        // Check org & secret
-        let org = program.organization || process.env.ORG
-        let secret = program.secret || process.env.secret
-        if (!org) {
-            console.error('missing organization identifier, exiting...')
-            console.error('please specify either via an ORG env variable, or the -o option')
+        // Check issuer id & secret
+        let issuer = program.issuer || process.env.ISSUER
+        if (!issuer) {
+            console.error('missing Guest Issuer identifier, exiting...')
+            console.error('please specify either via an ISSUER env variable, or the -i option')
             process.exit(1)
         }
+        let secret = program.secret || process.env.SECRET
         if (!secret) {
             console.error('missing organization secret, exiting...')
             console.error('please specify either via a SECRET env variable, or the -s option')
             process.exit(1)
         }
-        debug('successfully collected organization details')
+        debug('successfully collected Guest Issuer details')
 
         // Check user info
         if (typeof userid === 'undefined') {
@@ -41,14 +41,15 @@ note that:\n\
             console.error('no full name specified of "Guest" user, exiting...');
             process.exit(1);
         }
-        debug('successfully collected guest user info')
+        debug('successfully collected guest user info');
 
         // Forge issuer token
-        const JWTUtil = require('./sparkjwt-util')        
-        const issuerToken = JWTUtil.createJWTIssuer(org, secret, userid, username)
-
+        const GuestUtil = require('./sparkguest-util');
+        const expiresInSeconds =  Math.round(Date.now()/1000) + 60; // Guest token will expire in 60 seconds
+        const guestToken = GuestUtil.createGuestToken(issuer, secret, userid, username, expiresInSeconds);
+        
         // Request access token
-        JWTUtil.requestGuestToken(issuerToken)
+        GuestUtil.fetchToken(guestToken)
 
     })
     .on('--help', function () {

@@ -3,7 +3,7 @@
 // Licensed under the MIT License 
 //
 
-const debug = require('debug')('sparkjwt:verify')
+const debug = require('debug')('guest:verify')
 
 const program = require('commander')
 
