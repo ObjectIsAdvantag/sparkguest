@@ -25,11 +25,11 @@ module.exports.createGuestToken = function (issuer, secret, userid, username, ex
 
         const decoded = Buffer.from(secret, 'base64');
 
-        const issuerToken = jwt.sign(payload, decoded, { algorithm: 'HS256', noTimestamp: true });
+        const guestToken = jwt.sign(payload, decoded, { algorithm: 'HS256', noTimestamp: true });
 
-        debug("successfully built Guest token: " + issuerToken.substring(0,30));
+        debug("successfully built Guest token: " + guestToken.substring(0,30));
 
-        return issuerToken;
+        return guestToken;
     }
     catch (err) {
         console.error("failed to generate a Guest token, exiting...");
@@ -58,8 +58,8 @@ module.exports.fetchToken = function (guestToken) {
             process.exit(1);
         }
     
-        let issuedToken = response.data.token;
-        console.log(issuedToken);
+        let accessToken = response.data.token;
+        console.log(accessToken);
     })
     .catch(err => {
         switch (err.code) {
