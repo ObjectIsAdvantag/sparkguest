@@ -37,8 +37,8 @@ program
         console.log('')
         console.log('  Examples:')
         console.log('')
-        console.log('    $ sparkjwt verify --jwt 123456789.RRETEZT3T63362.987654321')
-        console.log('    $ sparkjwt verify --spark 123456789.RRETEZT3T63362.987654321')
+        console.log('    $ sparkguest verify --jwt 123456789.RRETEZT3T63362.987654321')
+        console.log('    $ sparkguest verify --spark 123456789.RRETEZT3T63362.987654321')
     })
 
 program.parse(process.argv)

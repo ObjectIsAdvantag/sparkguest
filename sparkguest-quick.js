@@ -12,7 +12,7 @@ program
 note that:\n\
   - the "Guest Issuer" identifier can be passed either via an ISSUER env variable, or the -i option\n\
   - the secret can be passed either via a SECRET env variable, or the -s option')
-  .option('-i, --issuer [issuer id]', 'Guest Issuer identifier')
+  .option('-i, --issuer [issuer_id]', 'Guest Issuer identifier')
   .option('-s, --secret [secret]', 'secret for the developer organization')
     .arguments('<userid> <username>')
     .action(function (userid, username) {
@@ -56,8 +56,8 @@ note that:\n\
         console.log('')
         console.log('  Examples:')
         console.log('')
-        console.log('    $ sparkjwt quick 123456789 "John Doe" -o "org_id" -s "secret"')
-        console.log('    $ ORG="org_id" SECRET="secret" sparkjwt quick 123456789 "John Doe"')
+        console.log('    $ sparkguest quick 123456789 "John Doe" -i "issuer_id" -s "secret"')
+        console.log('    $ ISSUER="issuer_id" SECRET="secret" sparkguest quick 123456789 "John Doe"')
     })
 
 program.parse(process.argv)
