@@ -1,7 +1,7 @@
 {
   "name": "sparkguest",
-  "version": "0.4.0",
-  "description": "CLI to create 'Guest' tokens, and fetch access tokens for Cisco Spark Guest Issuer applications.",
+  "version": "0.5.0",
+  "description": "CLI to create JWT tokens and issue access tokens for Webex Teams 'Guest' users.",
   "bin": {
     "sparkguest": "sparkguest"
   },
@@ -13,8 +13,8 @@
   },
   "keywords": [
     "jwt",
-    "guest",
-    "ciscospark"
+    "guest-issuer",
+    "webex-teams"
   ],
   "author": "Stève Sfartz <stsfartz@cisco.com>",
   "license": "MIT"

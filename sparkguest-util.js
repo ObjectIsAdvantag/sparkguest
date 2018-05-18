@@ -45,7 +45,7 @@ module.exports.createGuestToken = function (issuer, secret, userid, username, ex
 module.exports.fetchToken = function (guestToken) {
     debug("requesting new access token");
     
-    debug('contacting Cisco Spark API endpoint: /jwt/login');
+    debug('contacting Webex API endpoint: /jwt/login');
     
     const axios = require('axios');
     axios.post('https://api.ciscospark.com/v1/jwt/login', '',
@@ -64,7 +64,7 @@ module.exports.fetchToken = function (guestToken) {
     .catch(err => {
         switch (err.code) {
             case 'ENOTFOUND':
-                debug("could not contact Cisco Spark API");
+                debug("could not contact the Webex API");
                 break
             default:
                 debug("error accessing /jwt/login, err: " + err.message);

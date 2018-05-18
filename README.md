@@ -1,11 +1,11 @@
-# CLI to generate Guest tokens for Cisco Spark 'Guest Issuer' Applications
+# CLI to generate Guest tokens for Webex Teams 'Guest Issuer' Applications
 
-'Guest Issuer' Applications allow guests (non Cisco Spark users) to persistently use the Cisco Spark platform through the Spark SDKs and Widgets. Check the [online documentation for details](https://developer.ciscospark.com/guest-issuer.html).
+'Guest Issuer' Applications allow guests (non Webex Teams users) to persistently use the Web cloud platform through the Teams SDKs and Widgets. Check the [online documentation for details](https://developer.webex.com/guest-issuer.html).
 
 The `sparkguest` command line interface (CLI) helps generate Guest tokens for 'Guest Issuer' applications.
 
-To use the tool, you'll first need to create a 'Guest Issuer' application from [Spark for Developers portal](https://developer.ciscospark.com/add-guest.html), and fetch your 'Guest Issuer' Application's organisation id and secret.
-**Note that you need a paying account to access the 'Guest Issuer' application.**
+To use the tool, you'll first need to create a 'Guest Issuer' application from [Webex for Developers portal](https://developer.webex.com/add-guest.html), and fetch your 'Guest Issuer' application's identifier and secret.
+**Note that you need a Webex Teams paying account to create 'Guest Issuer' application.**
 
 
 ## QuickStart
@@ -46,17 +46,17 @@ To install the `sparkguest` CLI, type:
     ```
 
 
-To create a 'Guest token' for a 'Guest' user (non Cisco Spark users), type:
+To create a 'Guest token' for a 'Guest' user (non Webex Teams users), type:
 
     ```shell
     sparkguest [create] <userId> <userName> -i <issuerAppId> -s <issuerAppSecret> [-d <expirationDelay>]
     ```
 
     Where:
-        - `userId` is a user identifier unique to your 'Guest Issuer'. This identifier is used by Cisco Spark to persist user data among sessions. Understand: if another token gets generated with the same 'userId', the Guest user interacting with that token will see Spaces, Messages, and inherit Memberships from previous Spark interactions for this 'userId',
-        - `userName` is used to identify the user in Cisco Spark spaces,
+        - `userId` is a user identifier unique to your 'Guest Issuer'. This identifier is used by the Webex cloud platform to persist user data among sessions. Understand: if another token gets generated with the same 'userId', the Guest user interacting with that token will see Spaces, Messages, and inherit Memberships from previous Webex interactions for this 'userId',
+        - `userName` is used to identify the user in Webex Teams spaces,
         - `expirationDelay` should be specified in seconds, defaults to 5400s (90min) from now.
-        - the `issuerAppId` and `issuerAppSecret` tie to the 'Guest Issuer Application' created frpm the [Spark for Developers portal](https://developer.ciscospark.com/add-guest.html).
+        - the `issuerAppId` and `issuerAppSecret` tie to the 'Guest Issuer Application' created from the [Webex for Developers portal](https://developer.webex.com/add-guest.html).
     
     Example (with verbose debugging info):
 
@@ -80,7 +80,7 @@ Once you've got a 'Guest token', you'll need to fetch an access token (valid for
     ```
 
     Note that:
-       - the command uses the Cisco Spark API 's /jwt/login endpoint behind the scene.
+       - the command uses the Webex Teams API 's /jwt/login endpoint behind the scene.
        - the fetched accessed token is valid for 6 hours
 
 
@@ -100,8 +100,8 @@ To quickly the Person behind an access token (equivalent tp a GET /people/me req
 
 ### Guest tokens
 
-Guest tokens have a JWT format, and are signed with your 'Guest Issuer Application' secret so that Cisco Spark can be assured of its origin.
-It contains an expiration date so that Cisco Spark will refuse to generate access tokens - via the /jwt/login endpoint - after the expiration date.
+Guest tokens have a JWT format, and are signed with your 'Guest Issuer Application' secret so that Webex can be assured of its origin.
+It contains an expiration date so that Webex will refuse to generate access tokens - via the /jwt/login endpoint - after the expiration date.
 
 **Example of Guest token**
 
@@ -134,12 +134,12 @@ Go to https://jwt.io to decode it, or simply type: `sparkguest verfiy --jwt <gue
 ```
 
 
-### Retreiving Access tokens for 'Guest' users 
+### Retreiving API access tokens for 'Guest' users 
 
-These tokens are generated from 'Guest tokens' by invoking Cisco Spark's /jwt/login endpoint
-They give access to the Cisco Spark API, SDKs and Widgets under the identity of the 'Guest' user.
+These tokens are generated from 'Guest tokens' by invoking Webex Teams API 's /jwt/login endpoint
+They give access to the Webex Teams API, SDKs and Widgets under the identity of the 'Guest' user.
 
-To test an access token for a user, reach to the [GET /people/me](https://developer.ciscospark.com/endpoint-people-me-get.html) resource, paste the access token and run the request.
+To test an access token for a user, reach to the [GET /people/me](https://developer.webex.com/endpoint-people-me-get.html) resource, paste the access token and run the request.
 Alternatively, you can type: `sparkguest verify --spark <access_token>`
 
     Example of Person details for an access token attached to a Guest user:

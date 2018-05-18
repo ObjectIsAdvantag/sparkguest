@@ -10,7 +10,7 @@ const program = require('commander')
 program
     .description('reveals info contained in a JWT token')
     .option("-j, --jwt", "decrypts the JWT token (works with JWT issuer and issued tokens)")
-    .option("-s, --spark", "shows the Cisco Spark user identity (only work with JWT issued tokens)")
+    .option("-s, --spark", "shows the Webex user identity (only work with JWT issued tokens)")
     .arguments('<token>')
     .action(function (token) {
 
@@ -23,7 +23,7 @@ program
 
         if (program.spark) {
             // Ask spark for info
-            debug('got it: will inquire via Spark about this token')
+            debug('got it: will ask Webex about this token')
             showSparkInfo(token)
             return
         }
@@ -73,7 +73,7 @@ function checkJWTtoken(token) {
 
 
 function showSparkInfo(token) {
-    debug('contacting Cisco Spark API endpoint: /people/me')
+    debug('contacting Webex API resource: /people/me')
 
     const axios = require('axios');
     axios.get('https://api.ciscospark.com/v1/people/me',
@@ -81,7 +81,7 @@ function showSparkInfo(token) {
         .then(response => {
             if (!response.data) {
                 debug("unexpected response, no payload")
-                console.log("could not contact Spark")
+                console.log("could not contact Webex")
                 process.exit(1)
             }
 
@@ -107,7 +107,7 @@ function showSparkInfo(token) {
                     debug("error accessing /people/me, err: " + err.message)
                     break
             }
-            console.error("could not contact Cisco Spark API")
+            console.error("could not contact Webex")
             process.exit(1);
         })
 }
