@@ -65,6 +65,7 @@ program
         const issuerToken = GuestUtil.createGuestToken(issuer, secret, id, name, expiresInSeconds)
 
         // Show token
+        console.log(`Here is a JWT token, valid for: ${delay} seconds, for Permanent Guest: ${name}`);
         console.log(issuerToken)
     })
     .on('--help', function () {

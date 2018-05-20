@@ -1,7 +1,7 @@
 {
   "name": "sparkguest",
-  "version": "0.5.0",
-  "description": "CLI to create JWT tokens and issue access tokens for Webex Teams 'Guest' users.",
+  "version": "0.5.1",
+  "description": "CLI to create JWT tokens and issue Webex Teams API access tokens for 'Permanent Guest'",
   "bin": {
     "sparkguest": "sparkguest"
   },

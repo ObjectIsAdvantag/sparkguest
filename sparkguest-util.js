@@ -59,6 +59,7 @@ module.exports.fetchToken = function (guestToken) {
         }
     
         let accessToken = response.data.token;
+        console.log(`Here is an access token, valid for: ${response.data.expiresIn} seconds`);
         console.log(accessToken);
     })
     .catch(err => {

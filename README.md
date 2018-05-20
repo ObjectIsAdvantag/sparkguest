@@ -1,6 +1,6 @@
-# CLI to generate Guest tokens for Webex Teams 'Guest Issuer' Applications
+# CLI to generate JWT and access tokens for Webex Teams 'Permanent Guest'
 
-'Guest Issuer' Applications allow guests (non Webex Teams users) to persistently use the Web cloud platform through the Teams SDKs and Widgets. Check the [online documentation for details](https://developer.webex.com/guest-issuer.html).
+'Guest Issuer' applications allow guests (aka, non Webex Teams users) to persistently use the Webex cloud platform through the Teams SDKs and Widgets. Check the [online documentation for details](https://developer.webex.com/guest-issuer.html).
 
 The `sparkguest` command line interface (CLI) helps generate Guest tokens for 'Guest Issuer' applications.
 
@@ -191,3 +191,13 @@ Go to https://jwt.io, or simply type: `sparkjwt verify --jwt <token>`
   "user_modify_timestamp": "20180127172701.477Z"
 }
 ```
+
+
+### Tip : Adding a 'Permanent Guest' to a space
+
+The general use case for "Permanent Guest" is to call an existing Webex Teams user, and create a space and add Bots or Webex Teams users to the space.
+
+Sometimes, you may be interested to add a 'Permanent Guest' to an existing space (or newly created space).
+You'll hit a difficulty here since 'Permanent Guest' cannot be reached via their Webex email.
+Simply use the `personId` in the [POST /membership - Create a membership](https://developer.webex.com/endpoint-memberships-post.html) resource.
+Note that you can get the Webex Teams `personId` of a "Permanent Guest" through a [GET /people/me](https://developer.webex.com/endpoint-people-me-get.html) request issued with the "Permanent Guest" access token.
